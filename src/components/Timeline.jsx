@@ -1,6 +1,7 @@
 "use client";
 import { useScroll, useTransform, motion } from "framer-motion";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 
 export const Timeline = ({ data }) => {
   const ref = useRef(null);
@@ -72,4 +73,13 @@ export const Timeline = ({ data }) => {
       </div>
     </div>
   );
+};
+
+Timeline.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    job: PropTypes.string.isRequired,
+    contents: PropTypes.arrayOf(PropTypes.string).isRequired,
+  })).isRequired,
 };

@@ -17,7 +17,7 @@ const About = () => {
             className="absolute scale-[1.75] -right-[5rem] -top-[1rem] md:scale-[3] md:left-50 md:inset-y-10 lg:scale-[2.5]"
           />
           <div className="z-10">
-            <p className="headtext">Hi, I'm Abdul Hashim</p>
+            <p className="headtext">Hi, I&apos;m Abdul Hashim</p>
             <p className="subtext">
             In the past 2 years, I’ve worked with Deep Learning, Gen AI, and other AI technologies to create smart applications.
             </p>
@@ -80,7 +80,7 @@ const About = () => {
           <div className="z-10 w-[50%]">
             <p className="headtext">Time Zone</p>
             <p className="subtext">
-              I'm based in Mars, and open to remote work worldwide
+              I&apos;m based in Mars, and open to remote work worldwide
             </p>
           </div>
           <figure className="absolute left-[30%] top-[10%]">

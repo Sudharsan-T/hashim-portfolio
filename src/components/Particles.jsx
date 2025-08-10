@@ -1,5 +1,6 @@
 import { twMerge } from "tailwind-merge";
-import React, { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 
 function MousePosition() {
   const [mousePosition, setMousePosition] = useState({
@@ -62,49 +63,12 @@ export const Particles = ({
   const rafID = useRef(null);
   const resizeTimeout = useRef(null);
 
-  useEffect(() => {
-    if (canvasRef.current) {
-      context.current = canvasRef.current.getContext("2d");
-    }
-    initCanvas();
-    animate();
-
-    const handleResize = () => {
-      if (resizeTimeout.current) {
-        clearTimeout(resizeTimeout.current);
-      }
-      resizeTimeout.current = setTimeout(() => {
-        initCanvas();
-      }, 200);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      if (rafID.current != null) {
-        window.cancelAnimationFrame(rafID.current);
-      }
-      if (resizeTimeout.current) {
-        clearTimeout(resizeTimeout.current);
-      }
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [color]);
-
-  useEffect(() => {
-    onMouseMove();
-  }, [mousePosition.x, mousePosition.y]);
-
-  useEffect(() => {
-    initCanvas();
-  }, [refresh]);
-
-  const initCanvas = () => {
+  const initCanvas = useCallback(() => {
     resizeCanvas();
     drawParticles();
-  };
+  }, []);
 
-  const onMouseMove = () => {
+  const onMouseMove = useCallback(() => {
     if (canvasRef.current) {
       const rect = canvasRef.current.getBoundingClientRect();
       const { w, h } = canvasSize.current;
@@ -116,7 +80,7 @@ export const Particles = ({
         mouse.current.y = y;
       }
     }
-  };
+  }, [mousePosition.x, mousePosition.y]);
 
   const resizeCanvas = () => {
     if (canvasContainerRef.current && canvasRef.current && context.current) {
@@ -257,6 +221,43 @@ export const Particles = ({
     rafID.current = window.requestAnimationFrame(animate);
   };
 
+  useEffect(() => {
+    if (canvasRef.current) {
+      context.current = canvasRef.current.getContext("2d");
+    }
+    initCanvas();
+    animate();
+
+    const handleResize = () => {
+      if (resizeTimeout.current) {
+        clearTimeout(resizeTimeout.current);
+      }
+      resizeTimeout.current = setTimeout(() => {
+        initCanvas();
+      }, 200);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      if (rafID.current != null) {
+        window.cancelAnimationFrame(rafID.current);
+      }
+      if (resizeTimeout.current) {
+        clearTimeout(resizeTimeout.current);
+      }
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [color, initCanvas]);
+
+  useEffect(() => {
+    onMouseMove();
+  }, [mousePosition.x, mousePosition.y, onMouseMove]);
+
+  useEffect(() => {
+    initCanvas();
+  }, [refresh, initCanvas]);
+
   return (
     <div
       className={twMerge("pointer-events-none", className)}
@@ -267,4 +268,16 @@ export const Particles = ({
       <canvas ref={canvasRef} className="size-full" />
     </div>
   );
+};
+
+Particles.propTypes = {
+  className: PropTypes.string,
+  quantity: PropTypes.number,
+  staticity: PropTypes.number,
+  ease: PropTypes.number,
+  size: PropTypes.number,
+  refresh: PropTypes.bool,
+  color: PropTypes.string,
+  vx: PropTypes.number,
+  vy: PropTypes.number,
 };

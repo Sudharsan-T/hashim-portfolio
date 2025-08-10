@@ -3,6 +3,7 @@
 import createGlobe from "cobe";
 import { useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
 import { twMerge } from "tailwind-merge";
 
@@ -37,8 +38,8 @@ const GLOBE_CONFIG = {
 };
 
 export function Globe({ className, config = GLOBE_CONFIG }) {
-  let phi = 0;
-  let width = 0;
+  const phiRef = useRef(0);
+  const widthRef = useRef(0);
   const canvasRef = useRef(null);
   const pointerInteracting = useRef(null);
   const pointerInteractionMovement = useRef(0);
@@ -68,7 +69,7 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
   useEffect(() => {
     const onResize = () => {
       if (canvasRef.current) {
-        width = canvasRef.current.offsetWidth;
+        widthRef.current = canvasRef.current.offsetWidth;
       }
     };
 
@@ -77,13 +78,13 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
 
     const globe = createGlobe(canvasRef.current, {
       ...config,
-      width: width * 2,
-      height: width * 2,
+      width: widthRef.current * 2,
+      height: widthRef.current * 2,
       onRender: (state) => {
-        if (!pointerInteracting.current) phi += 0.005;
-        state.phi = phi + rs.get();
-        state.width = width * 2;
-        state.height = width * 2;
+        if (!pointerInteracting.current) phiRef.current += 0.005;
+        state.phi = phiRef.current + rs.get();
+        state.width = widthRef.current * 2;
+        state.height = widthRef.current * 2;
       },
     });
 
@@ -120,3 +121,8 @@ export function Globe({ className, config = GLOBE_CONFIG }) {
     </div>
   );
 }
+
+Globe.propTypes = {
+  className: PropTypes.string,
+  config: PropTypes.object,
+};

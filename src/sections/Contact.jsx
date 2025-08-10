@@ -28,10 +28,9 @@ const Contact = () => {
     setIsLoading(true);
 
     try {
-      console.log("From submitted:", formData);
       await emailjs.send(
-        "service_79b0nyj",
-        "template_17us8im",
+        import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_79b0nyj",
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_17us8im",
         {
           from_name: formData.name,
           to_name: "Abdul",
@@ -39,15 +38,14 @@ const Contact = () => {
           to_email: "hashimubaid2004@gmail.com",
           message: formData.message,
         },
-        "pn-Bw_mS1_QQdofuV"
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "pn-Bw_mS1_QQdofuV"
       );
       setIsLoading(false);
       setFormData({ name: "", email: "", message: "" });
-      showAlertMessage("success", "You message has been sent!");
-    } catch (error) {
+      showAlertMessage("success", "Your message has been sent!");
+    } catch {
       setIsLoading(false);
-      console.log(error);
-      showAlertMessage("danger", "Somthing went wrong!");
+      showAlertMessage("danger", "Something went wrong!");
     }
   };
   return (
@@ -62,10 +60,10 @@ const Contact = () => {
       {showAlert && <Alert type={alertType} text={alertMessage} />}
       <div className="flex flex-col items-center justify-center max-w-md p-5 mx-auto border border-white/10 rounded-2xl bg-primary">
         <div className="flex flex-col items-start w-full gap-5 mb-10">
-          <h2 className="text-heading">Let's Talk</h2>
+          <h2 className="text-heading">Let&apos;s Talk</h2>
           <p className="font-normal text-neutral-400">
-            Whether you're loking to build a new website, improve your existing
-            platform, or bring a unique project to life, I'm here to help
+            Whether you&apos;re looking to build a new website, improve your existing
+            platform, or bring a unique project to life, I&apos;m here to help
           </p>
         </div>
         <form className="w-full" onSubmit={handleSubmit}>
