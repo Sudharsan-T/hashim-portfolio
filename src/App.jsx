@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import Navbar from "./sections/navbar";
-=======
 import React from "react";
 import Navbar from "./sections/Navbar";
->>>>>>> 6bb94ae0dfe589ee78d8c85a8cefdafa0aeaeb4d
 import Hero from "./sections/Hero";
 import About from "./sections/About";
 import Projects from "./sections/Projects";
